@@ -177,15 +177,16 @@ class ItemController extends BaseController
         $category_name_last_char = $arr_of_code_name[2];
 
 
-        $item = Item::select("items.*")
-                ->where("name","LIKE","$name_item%")
-                ->where("commercial_name","LIKE","$commercial_name%")
-                ->join('categories', 'categories.id', '=', 'items.category_id')
-                ->where("categories","LIKE","$category_name_first_char%")
-                ->where("categories","LIKE","%$category_name_last_char")
-                ->first();
-// dd($item);
+        $item = Item::select("*")
+              
+                ->where("items.name","LIKE","$name_item%")
+                ->where("items.commercial_name","LIKE","$commercial_name%")
 
-        return $item;
+                ->join("categories", "categories.id", "=", "items.category_id")
+                ->where("categories.name","LIKE","$category_name_first_char%")
+                ->where("categories.name","LIKE","%$category_name_last_char")
+                ->first();
+
+        return $this->sendResponse($item, "success");
     }
 }
