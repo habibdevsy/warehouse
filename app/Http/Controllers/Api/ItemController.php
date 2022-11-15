@@ -163,4 +163,29 @@ class ItemController extends BaseController
         
         return $code;
     }
+   
+    /**
+    * decode
+    */
+    public function decode(string $code)
+    {
+        $arr_of_code_name = str_split($code);
+
+        $name_item = $arr_of_code_name[0];
+        $commercial_name = $arr_of_code_name[3];
+        $category_name_first_char = $arr_of_code_name[1];
+        $category_name_last_char = $arr_of_code_name[2];
+
+
+        $item = Item::select("items.*")
+                ->where("name","LIKE","$name_item%")
+                ->where("commercial_name","LIKE","$commercial_name%")
+                ->join('categories', 'categories.id', '=', 'items.category_id')
+                ->where("categories","LIKE","$category_name_first_char%")
+                ->where("categories","LIKE","%$category_name_last_char")
+                ->first();
+// dd($item);
+
+        return $item;
+    }
 }

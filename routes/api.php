@@ -27,4 +27,5 @@ Route::prefix('category')->controller(CategoryController::class)->group(function
 Route::prefix('item')->controller(ItemController::class)->group(function () {
     Route::post('insert', 'create');
     Route::put('pull', 'pull');
+    Route::get('decode/{code}', 'decode');
 });
