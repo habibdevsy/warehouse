@@ -19,6 +19,7 @@ class ItemController extends BaseController
     */
     public function create(Request $request)
     {  
+        $this->generateCodeIndicatingItem();
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:150',
             'commercial_name' => 'required|string|max:150',
@@ -134,4 +135,32 @@ class ItemController extends BaseController
         
         return $code;
      }
+
+    /**
+    * generate code indicating an item
+    */
+    public function  generateCodeIndicatingItem()
+    {
+        $item_name = "chair";
+        $category_name = "office";
+        $commercial_name = "IKEA";
+
+        $arr_of_item_name = str_split($item_name);
+        $first_character_of_item_name = strtoupper($arr_of_item_name[0]);
+
+        $arr_of_category_name = str_split($category_name);
+        $first_character_of_category_name = strtoupper($arr_of_category_name[0]);
+        $last_character_of_category_name = strtoupper(end($arr_of_category_name));
+
+        $arr_of_commercial_name = str_split($commercial_name);
+        $first_character_of_commercial_name = strtoupper($arr_of_commercial_name[0]);
+       
+        $count_character_of_commercial_name = count($arr_of_commercial_name);
+   
+        $invID = str_pad($count_character_of_commercial_name, 3, '0', STR_PAD_LEFT);
+
+        $code = join("",[$first_character_of_item_name, $first_character_of_category_name, $last_character_of_category_name, $first_character_of_commercial_name, $invID]);
+        
+        return $code;
+    }
 }
