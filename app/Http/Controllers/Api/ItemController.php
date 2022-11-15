@@ -176,8 +176,7 @@ class ItemController extends BaseController
         $category_name_first_char = $arr_of_code_name[1];
         $category_name_last_char = $arr_of_code_name[2];
 
-
-        $item = Item::select("*")
+        $item = Item::select("items.id", "items.name", "items.commercial_name", "categories.name as category_name")
               
                 ->where("items.name","LIKE","$name_item%")
                 ->where("items.commercial_name","LIKE","$commercial_name%")
