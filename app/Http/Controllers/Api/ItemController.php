@@ -19,7 +19,6 @@ class ItemController extends BaseController
     */
     public function create(Request $request)
     {  
-        $this->generateCodeIndicatingItem();
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:150',
             'commercial_name' => 'required|string|max:150',
@@ -46,7 +45,9 @@ class ItemController extends BaseController
             ]);
 
         if($item) {
-            $this->createInTransaction($item->quantity, $item->id);
+            $code = $this->generateCodeIndicatingItem($item->name, $category->name, $item->commercial_name);
+
+            $this->createInTransaction($item->quantity, $item->id, $code);
         }
 
         return $this->sendResponse($item, "success");
@@ -95,9 +96,8 @@ class ItemController extends BaseController
     *
     * @return \Illuminate\Http\Response
     */
-    public function createInTransaction(int $quantity, int $item_id):void
+    public function createInTransaction(int $quantity, int $item_id, string $code):void
     {  
-        $code = $this->generateCode($item_id);
         InTransaction::create([
             'code' => $code,
             'quantity' => $quantity,
@@ -139,11 +139,11 @@ class ItemController extends BaseController
     /**
     * generate code indicating an item
     */
-    public function  generateCodeIndicatingItem()
+    public function generateCodeIndicatingItem(string $item_name, string $category_name, string $commercial_name)
     {
-        $item_name = "chair";
-        $category_name = "office";
-        $commercial_name = "IKEA";
+        // $item_name = "chair";
+        // $category_name = "office";
+        // $commercial_name = "IKEA";
 
         $arr_of_item_name = str_split($item_name);
         $first_character_of_item_name = strtoupper($arr_of_item_name[0]);
